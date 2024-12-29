@@ -32,6 +32,7 @@
 *.app
 
 # Test files
+userdata/
 test.*
 
 # vscode settings
