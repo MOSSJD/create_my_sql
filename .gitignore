@@ -33,3 +33,6 @@
 
 # Test files
 test.*
+
+# vscode settings
+.vscode/
