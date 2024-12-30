@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include <set>
 #include <functional>
 #include <algorithm>
@@ -7,6 +6,11 @@
 #include <stdexcept>
 #include <sstream>
 #include <map>
+#include "my_sql.hpp"
+#include <fstream>
+#include <iostream>
+#include <string>
+
 enum class DataType
 {
     INT, DOUBLE, CHAR, VARCHAR, BOOL
@@ -118,23 +122,18 @@ int main()
     auto getALine = [](std::ifstream &ifs, std::string &line) -> bool
     {
         std::getline(ifs, line);
+        auto l_iter = std::find_if(line.begin(), line.end(), [](auto &a){ return a != ' '; });
+        auto r_iter = std::find_if(line.rbegin(), line.rend(), [](auto &a){ return a != ' '; }).base();
+        size_t pos = l_iter - line.begin();
+        size_t len = r_iter - l_iter;
+        line = line.substr(pos, len);
         std::transform(line.begin(), line.end(), line.begin(), tolower);
-        int l = 0, r = line.size() - 1;
-        while (l < line.size() && line[l] == ' ') l++;
-        while (r >= l && line[r] == ' ') r--;
-        line = line.substr(l, r - l + 1);
         return ifs.eof();
     };
     auto validName = [](const std::string &line) -> bool
     {
-        bool first = true;
-        for (const auto &i : line)
-        {
-            if (!((!first && (i >= '0' && i <= '9')) || (i >= 'a' && i <= 'z')))
-                return false;
-            first = false;
-        }
-        return true;
+        if (!isalpha(line[0])) return false;
+        return std::all_of(line.begin() + 1, line.end(), isalnum);
     };
     auto startWithLeftBrace = [getALine](std::ifstream &ifs, std::string &line) -> bool
     {
