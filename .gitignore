@@ -34,6 +34,7 @@
 # Test files
 userdata/
 test.*
+out/
 
 # vscode settings
 .vscode/

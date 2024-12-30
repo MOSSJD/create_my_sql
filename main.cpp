@@ -113,7 +113,7 @@ int main()
 
     // Read metadata
     std::set<Database*> databases;
-    std::ifstream metadataStream("databases.txt");
+    std::ifstream metadataStream("userdata/databases.txt");
     Database *tempDatabase = nullptr;
     auto getALine = [](std::ifstream &ifs, std::string &line) -> bool
     {
@@ -179,24 +179,34 @@ int main()
                 throw std::runtime_error("table could only start with '{'");
             Field *tempField = nullptr;
             bool nextField = false;
+            bool first = true;
             while (!getALine(metadataStream, line))
             {
+                bool p_nextField = nextField;
                 nextField = false;
                 if (line == "}") // reached the end of the table
                     break;
-                else if (endWithComma(line))
+                else if (line == "},") // indicates the next table
                 {
-                    if (line == "},") // indicates the next table
-                    {
-                        nextTable = true;   
-                        break;
-                    }
-                    else // indicates the next field
+                    nextTable = true;
+                    break;
+                }
+                else if (first)
+                {
+                    if (endWithComma(line))
                     {
                         line.pop_back();
                         nextField = true;
                     }
                 }
+                else if (endWithComma(line)) // Is a field and not the first
+                {
+                    line.pop_back();
+                    nextField = true;
+                }
+                else if (!p_nextField)
+                    throw std::runtime_error("multiple field must be seperated by comma");
+                first = false;
                 std::stringstream ss(line);
 
                 std::string tempName;
