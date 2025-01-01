@@ -38,3 +38,6 @@ out/
 
 # vscode settings
 .vscode/
+
+#misc
+out.txt
