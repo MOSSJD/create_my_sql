@@ -3,33 +3,6 @@
 namespace me
 {
 
-    enum class DataType
-    {
-        INT,
-        DOUBLE,
-        CHAR,
-        VARCHAR,
-        BOOL
-    };
-    const std::map<std::string, DataType> dataTypeAbbrs{
-        {"i", DataType::INT},
-        {"d", DataType::DOUBLE},
-        {"c", DataType::CHAR},
-        {"vc", DataType::VARCHAR},
-        {"b", DataType::BOOL}};
-    const std::map<DataType, std::string> dataAbbrTypes{
-        {DataType::INT, "i"},
-        {DataType::DOUBLE, "d"},
-        {DataType::CHAR, "c"},
-        {DataType::VARCHAR, "vc"},
-        {DataType::BOOL, "b"}};
-    const std::map<DataType, size_t> dataLengths{
-        {DataType::INT, 4},
-        {DataType::DOUBLE, 8},
-        {DataType::CHAR, 1},
-        {DataType::BOOL, 1},
-    };
-
     bool getALine(std::istream &ifs, std::string &line)
     {
         std::getline(ifs, line);
@@ -136,7 +109,6 @@ namespace me
         databases[database.getName()] = database;
         return databases[database.getName()];
     }
-    DatabaseManager::DatabaseManager() = delete;
     DatabaseManager::DatabaseManager(const std::string &metadataFileDir)
         : metadataFileDir(metadataFileDir)
     {
@@ -270,7 +242,7 @@ namespace me
     void DatabaseManager::save()
     {
         // std::ofstream metadataStream(metadataFileDir);
-        std::ofstream metadataStream("out.txt");
+        std::ofstream metadataStream(metadataFileDir);
         bool first = true;
         for (const auto &[name, database] : databases)
         {
