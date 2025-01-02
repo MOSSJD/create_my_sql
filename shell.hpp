@@ -11,7 +11,9 @@ namespace me
     {
     private:
         static const std::string defaultMetadataDir;
+        static const std::string defaultRowdataDir;
         std::string metadataDir;
+        std::string rowdataDir;
         me::DatabaseManager databaseManager;
 
     public:
@@ -20,7 +22,7 @@ namespace me
 
     public:
         Shell();
-        Shell(const std::string &metadataDir);
+        Shell(const std::string &metadataDir, const std::string &rowdataDir);
         ~Shell();
 
     public:

@@ -5,10 +5,11 @@ namespace me
 
     const std::set<std::string> Shell::EXITCODES = {"exit", "quit"};
     const std::string Shell::DEFAULT_OPEN_FOLDER = "";
-    Shell::Shell() : Shell(defaultMetadataDir) {}
-    Shell::Shell(const std::string &metadataDir)
+    Shell::Shell() : Shell(defaultMetadataDir, defaultRowdataDir) {}
+    Shell::Shell(const std::string &metadataDir, const std::string &rowdataDir)
         : metadataDir(metadataDir),
-          databaseManager(metadataDir)
+          rowdataDir(rowdataDir),
+          databaseManager(metadataDir, rowdataDir)
     {
     }
     Shell::~Shell() = default;
@@ -30,5 +31,6 @@ namespace me
         }
     }
     const std::string Shell::defaultMetadataDir = "userdata/databases.txt";
+    const std::string Shell::defaultRowdataDir = "userdata/rows.txt";
 
 }

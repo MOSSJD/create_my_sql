@@ -3,6 +3,9 @@
 
 #include <map>
 #include <iostream>
+#include <typeinfo>
+#include <typeindex>
+#include <variant>
 
 namespace me
 {
@@ -15,6 +18,13 @@ namespace me
         VARCHAR,
         BOOL
     };
+    using Data = std::variant<int, double, char, std::string, bool>;
+    const std::map<DataType, std::type_index> dataTypeIndex{
+        {DataType::INT, typeid(int)},
+        {DataType::DOUBLE, typeid(double)},
+        {DataType::CHAR, typeid(char)},
+        {DataType::VARCHAR, typeid(std::string)},
+        {DataType::BOOL, typeid(bool)}};
     const std::map<std::string, DataType> dataTypeAbbrs{
         {"i", DataType::INT},
         {"d", DataType::DOUBLE},

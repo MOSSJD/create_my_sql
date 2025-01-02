@@ -30,7 +30,7 @@ namespace me
     {
         os << "    " << table.name << "\n    {\n";
         bool first = true;
-        for (const auto &[name, field] : table.fields)
+        for (const auto &field : table.fields)
         {
             if (!first)
                 os << ",\n";
@@ -49,8 +49,8 @@ namespace me
     Table::~Table() = default;
     Field &Table::addField(const Field &field)
     {
-        fields[field.name] = field;
-        return fields[field.name];
+        fields.push_back(field);
+        return fields.back();
     }
 
     std::ostream &operator<<(std::ostream &os, const Database &database)
@@ -84,8 +84,17 @@ namespace me
         databases[database.getName()] = database;
         return databases[database.getName()];
     }
-    DatabaseManager::DatabaseManager(const std::string &metadataFileDir)
-        : metadataFileDir(metadataFileDir)
+    DatabaseManager::DatabaseManager(const std::string &metadataFileDir, const std::string &rowdataFileDir)
+        : metadataFileDir(metadataFileDir),
+          rowdataFileDir(rowdataFileDir)
+    {
+        readMetadata();
+        readRows();
+    }
+    void DatabaseManager::readRows()
+    {
+        }
+    void DatabaseManager::readMetadata()
     {
         std::ifstream metadataStream(metadataFileDir);
         if (!metadataStream.is_open())
@@ -216,7 +225,7 @@ namespace me
     }
     void DatabaseManager::save()
     {
-        // std::ofstream metadataStream(metadataFileDir);
+        // std::ofstream metadataStream("out.txt");
         std::ofstream metadataStream(metadataFileDir);
         bool first = true;
         for (const auto &[name, database] : databases)

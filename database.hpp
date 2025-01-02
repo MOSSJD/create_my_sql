@@ -5,6 +5,8 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <vector>
+#include <variant>
 
 namespace me
 {
@@ -25,17 +27,19 @@ namespace me
     {
     private:
         std::string name;
-        std::map<std::string, Field> fields;
-
-    public:
-        friend std::ostream &operator<<(std::ostream &os, const Table &table);
-        const std::string &getName() const;
+        std::vector<Field> fields;
+        std::vector<std::vector<Data>> rows;
 
     public:
         Table();
         Table(const std::string &name);
         ~Table();
+
+    public:
+        friend std::ostream &operator<<(std::ostream &os, const Table &table);
+        const std::string &getName() const;
         Field &addField(const Field &field);
+        std::vector<Data &> retriveData(const size_t &rowIndex, const std::vector<int> &fieldOrder);
     };
 
     class Database
@@ -61,12 +65,15 @@ namespace me
     private:
         std::map<std::string, Database> databases;
         const std::string metadataFileDir;
+        const std::string rowdataFileDir;
 
     public:
         Database &addDatabase(const Database &database);
         DatabaseManager() = delete;
-        DatabaseManager(const std::string &metadataFileDir);
+        DatabaseManager(const std::string &metadataFileDir, const std::string &rowdataFileDir);
         ~DatabaseManager();
+        void readMetadata();
+        void readRows();
 
     public:
         void save();
